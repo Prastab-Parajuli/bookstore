@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BookController {
 
     private final BookRepository repository;
+    private final CategoryRepository categoryRepository;
 
-    public BookController(BookRepository repository) {
-        this.repository = repository;
-    }
+    public BookController(BookRepository repository, CategoryRepository categoryRepository) {
+    this.repository = repository;
+    this.categoryRepository = categoryRepository;
+}
 
     @GetMapping("/index")
     public String index() {
@@ -29,6 +31,7 @@ public class BookController {
     @GetMapping("/addbook")
     public String addBook(Model model) {
         model.addAttribute("book", new Book());
+        model.addAttribute("categories", categoryRepository.findAll());
         return "addbook";
     }
 
@@ -47,13 +50,21 @@ public class BookController {
     @GetMapping("/edit/{id}")
     public String editBook(@PathVariable("id") Long id, Model model) {
         Book book = repository.findById(id).orElse(null);
+
         model.addAttribute("book", book);
+        model.addAttribute("categories", categoryRepository.findAll());
+
         return "editbook";
     }
 
     @PostMapping("/update")
-    public String updateBook(Book book) {
+    public String updateBook(Book book, @org.springframework.web.bind.annotation.RequestParam("category") Long categoryId) {
+
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        book.setCategory(category);
+
         repository.save(book);
+
         return "redirect:/booklist";
-    }
+}
 }

@@ -1,5 +1,6 @@
 package com.example.bookstore;
 
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,15 +19,19 @@ public class Book {
     private String isbn;
     private double price;
 
+    @ManyToOne
+    private Category category;
+
     public Book() {
     }
 
-    public Book(String title, String author, int publicationYear, String isbn, double price) {
+    public Book(String title, String author, int publicationYear, String isbn, double price, Category category) {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
         this.isbn = isbn;
         this.price = price;
+        this.category = category;
     }
 
     public Long getId() {
@@ -75,5 +80,13 @@ public class Book {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

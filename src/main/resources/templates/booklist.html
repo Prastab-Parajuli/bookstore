@@ -18,6 +18,7 @@
             <th>Publication Year</th>
             <th>ISBN</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
 
@@ -28,6 +29,7 @@
             <td th:text="${book.publicationYear}"></td>
             <td th:text="${book.isbn}"></td>
             <td th:text="${book.price}"></td>
+            <td th:text="${book.category.name}"></td>
 
             <td>
                 <a class="btn btn-danger"
