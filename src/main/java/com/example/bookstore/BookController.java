@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class BookController {
@@ -36,8 +37,13 @@ public class BookController {
     }
 
     @PostMapping("/save")
-    public String save(Book book) {
+    public String save(Book book, @RequestParam("category") Long categoryId) {
+
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        book.setCategory(category);
+
         repository.save(book);
+
         return "redirect:/booklist";
     }
 
@@ -58,7 +64,7 @@ public class BookController {
     }
 
     @PostMapping("/update")
-    public String updateBook(Book book, @org.springframework.web.bind.annotation.RequestParam("category") Long categoryId) {
+    public String updateBook(Book book, @RequestParam("category") Long categoryId) {
 
         Category category = categoryRepository.findById(categoryId).orElse(null);
         book.setCategory(category);
