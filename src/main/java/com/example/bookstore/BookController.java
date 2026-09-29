@@ -1,11 +1,14 @@
 package com.example.bookstore;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class BookController {
@@ -14,13 +17,25 @@ public class BookController {
     private final CategoryRepository categoryRepository;
 
     public BookController(BookRepository repository, CategoryRepository categoryRepository) {
-    this.repository = repository;
-    this.categoryRepository = categoryRepository;
-}
+        this.repository = repository;
+        this.categoryRepository = categoryRepository;
+    }
 
     @GetMapping("/index")
     public String index() {
         return "index";
+    }
+
+    @GetMapping("/books")
+    @ResponseBody
+    public Iterable<Book> getBooksRest() {
+        return repository.findAll();
+    }
+
+    @GetMapping("/books/{id}")
+    @ResponseBody
+    public Optional<Book> findBookRest(@PathVariable("id") Long id) {
+        return repository.findById(id);
     }
 
     @GetMapping("/booklist")
@@ -72,5 +87,5 @@ public class BookController {
         repository.save(book);
 
         return "redirect:/booklist";
-}
+    }
 }
