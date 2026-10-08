@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -15,7 +16,9 @@ public class BookstoreApplication {
     @Bean
     public CommandLineRunner bookCommandLineRunner(
             BookRepository bookRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
 
         return args -> {
 
@@ -53,6 +56,10 @@ public class BookstoreApplication {
                     15.00,
                     fiction
             ));
+
+           
+            userRepository.save(new AppUser("user", passwordEncoder.encode("user"), "user@example.com", "USER"));
+            userRepository.save(new AppUser("admin", passwordEncoder.encode("admin"), "admin@example.com", "ADMIN"));
         };
     }
 }
