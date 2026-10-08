@@ -2,6 +2,7 @@ package com.example.bookstore;
 
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +22,24 @@ public class BookController {
         this.categoryRepository = categoryRepository;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("/index")
     public String index() {
         return "index";
     }
 
+    // REST: return all books as JSON
     @GetMapping("/books")
     @ResponseBody
     public Iterable<Book> getBooksRest() {
         return repository.findAll();
     }
 
+    // REST: return one book by id as JSON
     @GetMapping("/books/{id}")
     @ResponseBody
     public Optional<Book> findBookRest(@PathVariable("id") Long id) {
@@ -63,6 +71,7 @@ public class BookController {
     }
 
     @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteBook(@PathVariable("id") Long id) {
         repository.deleteById(id);
         return "redirect:/booklist";
