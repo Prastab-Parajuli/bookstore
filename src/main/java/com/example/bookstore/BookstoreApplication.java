@@ -15,7 +15,7 @@ public class BookstoreApplication {
     }
 
     @Bean
-    @Profile("!test") // demo data is not loaded when running tests
+    @Profile("!test")
     public CommandLineRunner bookCommandLineRunner(
             BookRepository bookRepository,
             CategoryRepository categoryRepository,
